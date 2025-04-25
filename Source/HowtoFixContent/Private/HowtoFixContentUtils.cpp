@@ -64,9 +64,43 @@ Folder_SpawnFixPanel(TArray<FString> Folders)
 
 	
 
-	// 下一步我们要把这个Content变成我们自己的工具窗
-	TSharedRef<STextBlock> Content = SNew(STextBlock).Text(FText::FromString(TEXT("HelloWorld")));
-	Window->SetContent(Content);
+	// 做些复杂的逻辑：遍历资产，并且把每个资产的名字垂直罗列显示
+	// 垂直显示可以用SVerticalBox，他有两种添加新行的方式。我们这里会演示UI的[]包装和缩进语法和 链式编程配置属性
+	TSharedRef<SVerticalBox> VerticalBox = SNew(SVerticalBox)
+		// 第一种方法。在构造时可以直接添加内容，特殊语法，强烈建议不要现在就展开学习内部
+		+ SVerticalBox::Slot()
+		.AutoHeight()
+		[
+			SNew(STextBlock)
+			.Text(FText::FromString(TEXT("第 1 行")))
+		]
+		+ SVerticalBox::Slot()
+		.AutoHeight()
+		[
+			SNew(STextBlock)
+			.Text(FText::FromString(TEXT("第 2 行")))
+		];
+	
+	for (FAssetData Asset : Assets)
+	{
+		const FString Name     = Asset.GetFullName();
+		const FText   NameText = FText::FromString(Name);
+
+		TSharedRef<STextBlock> Row = SNew(STextBlock)
+			.Text(NameText)
+			.ColorAndOpacity(FLinearColor::Red);
+
+		// 第二种方法，对对象调用AddSlot接口，运行时动态添加，等效于上文的+ SVertical::Slot
+		VerticalBox->AddSlot()
+		.AutoHeight()
+		.Padding(1)
+		[
+			Row
+		];
+	}
+	
+	
+	Window->SetContent(VerticalBox);
 
 	
 	FSlateApplication::Get().AddWindow(Window);
