@@ -14,14 +14,25 @@ struct FHowtoFixContentAssetInfo;
 // 我们使用 SNew创建UI，内部会调用Construct去构造，并且自动初始化一个InArgs，支持以链式编程的方式去修改参数包
 
 
+// SListView<XXX>是引擎提供的列表UI模板类
+// 它可以绑定到一个 TSharedRef<XXX>的数组上, 为每一个成员 生成 STableRow<XXX>的UI（你可以在Row里面塞任何东西，详见OnGenerateRow)
+typedef TSharedRef<FHowtoFixContentAssetInfo> FAssetInfoSP;
+typedef SListView<FAssetInfoSP>               SAssetInfoListView;
+typedef STableRow<FAssetInfoSP>               SAssetInfoRow;
+
+
+
 class SHowtoFixContentAssetsView : public SCompoundWidget
 {
 	SLATE_BEGIN_ARGS(SHowtoFixContentAssetsView){}
 		SLATE_ARGUMENT(TSet<FAssetData>, Assets)
 	SLATE_END_ARGS()
 	void Construct(const FArguments& InArgs);
-
+	TSharedRef<ITableRow> OnGenerateRow(FAssetInfoSP Info, const TSharedRef<STableViewBase>& OwnerTable) const;
+	
+	
 private:
 	void AddInfo(FAssetData Asset);
-	TArray<FAssetData> Assets;
+	TArray<FAssetInfoSP>           Infos;
+	TSharedPtr<SAssetInfoListView> InfoListView;
 };

@@ -1,5 +1,6 @@
 #include "SHowtoFixContentAssetsView.h"
 
+#include "HowtoFixContentAssetInfo.h"
 #include "Widgets/Layout/SSpacer.h"
 
 
@@ -10,32 +11,31 @@ Construct(const FArguments& InArgs)
 		AddInfo(Asset);
 
 	
-	TSharedRef<SVerticalBox> VBox = SNew(SVerticalBox);
-	for (const FAssetData& Asset : Assets)
-	{
-		VBox->AddSlot()
-		. AutoHeight()
-		. Padding(1)
-		[
-			SNew(STextBlock)
-			.ColorAndOpacity(FLinearColor::Yellow)
-			.Text(FText::FromString(Asset.GetFullName()))
-		];
-	}
-
+	InfoListView = SNew(SAssetInfoListView)
+		.ListItemsSource(&Infos)
+		.OnGenerateRow(this, &SHowtoFixContentAssetsView::OnGenerateRow);
 	
 	ChildSlot
 	[
-		VBox
+		InfoListView.ToSharedRef()
 	];
 }
 
 
-
+TSharedRef<ITableRow> SHowtoFixContentAssetsView::
+OnGenerateRow(FAssetInfoSP Info, const TSharedRef<STableViewBase>& OwnerTable) const
+{
+	TSharedRef<SAssetInfoRow> Row = SNew(SAssetInfoRow, OwnerTable);
+	TSharedRef<SWidget> Content = Info->GetUI();
+	Row->SetContent(Content);
+	return Row;
+}
 
 
 void SHowtoFixContentAssetsView::
 AddInfo(FAssetData Asset)
 {
-	Assets.Add(Asset);
+	TSharedRef<FHowtoFixContentAssetInfo> Info = MakeShareable(new FHowtoFixContentAssetInfo);
+	Info->Asset = Asset;
+	Infos.Add(Info);
 }
