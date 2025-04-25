@@ -25,9 +25,10 @@ Construct(const FArguments& InArgs)
 TSharedRef<ITableRow> SHowtoFixContentAssetsView::
 OnGenerateRow(FAssetInfoSP Info, const TSharedRef<STableViewBase>& OwnerTable) const
 {
-	TSharedRef<SAssetInfoRow> Row = SNew(SAssetInfoRow, OwnerTable);
+	TSharedRef<SAssetInfoRow> Row = SNew(SAssetInfoRow, OwnerTable).Padding(2);
 	TSharedRef<SWidget> Content = Info->GetUI();
-	Row->SetContent(Content);
+	TSharedRef<SWidget> WrappedContent = SNew(SBorder).Padding(1) [ Content ];
+	Row->SetContent(WrappedContent);
 	return Row;
 }
 
@@ -36,6 +37,12 @@ void SHowtoFixContentAssetsView::
 AddInfo(FAssetData Asset)
 {
 	TSharedRef<FHowtoFixContentAssetInfo> Info = MakeShareable(new FHowtoFixContentAssetInfo);
+	const UClass* Class = Asset.GetClass();
+	if (Class->IsChildOf(UMaterial::StaticClass()))
+		Info = MakeShareable(new FHowtoFixContentAssetInfo_M);
+	else if (Class->IsChildOf(UTexture::StaticClass()))
+		Info = MakeShareable(new FHowtoFixContentAssetInfo_Tex);
+	
 	Info->Asset = Asset;
 	Infos.Add(Info);
 }
