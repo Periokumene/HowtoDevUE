@@ -21,6 +21,7 @@ public class HowtoFixContent : ModuleRules
                 "Slate",
                 "SlateCore",
                 "InputCore",
+                "EditorWidgets",
             }
         );
     }

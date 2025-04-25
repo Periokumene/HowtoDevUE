@@ -3,6 +3,10 @@
 
 #include "HowtoFixContentAssetInfo.h"
 
+#include "HowtoFixContentMisc.h"
+#include "EditorWidgets/Public/SEnumCombobox.h"
+#include "Widgets/Layout/SSpacer.h"
+
 TSharedRef<SWidget> FHowtoFixContentAssetInfo::
 GetUI()
 {
@@ -13,7 +17,8 @@ GetUI()
 
 
 
-TSharedRef<SWidget> FHowtoFixContentAssetInfo_M::GetUI()
+TSharedRef<SWidget> FHowtoFixContentAssetInfo_M::
+GetUI()
 {
 	return SNew(SHorizontalBox)
 	+ SHorizontalBox::Slot()
@@ -33,7 +38,36 @@ TSharedRef<SWidget> FHowtoFixContentAssetInfo_M::GetUI()
 		SNew(STextBlock)
 		.Font(FCoreStyle::GetDefaultFontStyle("Regular", 11))
 		.Text(FText::FromName(Asset.AssetName))
+	]
+	+ SHorizontalBox::Slot()
+	. FillWidth(1) // 如果在一堆AutoWidth里面混进一个FillWidth，它就会作为一个动态长度的填充把其他UI挤到两边。如果多个FillWidth控件的话则会按照比例系数分配
+	[
+		SNew(SSpacer).Size(FVector2D(1)) // 随便给长度啦，反正是FillWidth
+	]
+	+ SHorizontalBox::Slot()
+	. AutoWidth()
+	. VAlign(VAlign_Center)
+	[
+		// 这里我们第二次接触为UI添加事件，我们要绑定UI的状态到某些函数上，或者在UI更新的时候获得更多信息进行上下游更新
+		// 如何查询确定事件（委托）的函数签名，并且绑定函数呢？问小潘，打字太累了
+		SNew(SEnumComboBox, StaticEnum<EHowtoFixContent_MatCat>())
+		.OnEnumSelectionChanged(this, &FHowtoFixContentAssetInfo_M::OnMatCatChange)
+		.CurrentValue(this, &FHowtoFixContentAssetInfo_M::GetMatCat)
 	];
+}
+
+
+int32 FHowtoFixContentAssetInfo_M::
+GetMatCat() const
+{
+	return static_cast<int32>(MatCat);
+}
+
+
+void FHowtoFixContentAssetInfo_M::
+OnMatCatChange(int32 Value, ESelectInfo::Type)
+{
+	MatCat = static_cast<EHowtoFixContent_MatCat>(Value);
 }
 
 TSharedRef<SWidget> FHowtoFixContentAssetInfo_Tex::
