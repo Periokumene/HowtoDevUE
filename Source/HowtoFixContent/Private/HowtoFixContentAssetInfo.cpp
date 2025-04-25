@@ -57,21 +57,21 @@ GetUI()
 		// 这里我们第二次接触为UI添加事件，我们要绑定UI的状态到某些函数上，或者在UI更新的时候获得更多信息进行上下游更新
 		// 如何查询确定事件（委托）的函数签名，并且绑定函数呢？问小潘，打字太累了
 		SNew(SEnumComboBox, StaticEnum<EHowtoFixContent_MatCat>())
-		.OnEnumSelectionChanged(this, &FHowtoFixContentAssetInfo_M::OnMatCatChange)
-		.CurrentValue(this, &FHowtoFixContentAssetInfo_M::GetMatCat)
+		.OnEnumSelectionChanged(this, &FHowtoFixContentAssetInfo_M::OnCatChange)
+		.CurrentValue(this, &FHowtoFixContentAssetInfo_M::GetCat)
 	];
 }
 
 
 int32 FHowtoFixContentAssetInfo_M::
-GetMatCat() const
+GetCat() const
 {
 	return static_cast<int32>(MatCat);
 }
 
 
 void FHowtoFixContentAssetInfo_M::
-OnMatCatChange(int32 Value, ESelectInfo::Type)
+OnCatChange(int32 Value, ESelectInfo::Type)
 {
 	MatCat = static_cast<EHowtoFixContent_MatCat>(Value);
 }
@@ -104,5 +104,40 @@ GetUI()
 		SNew(STextBlock)
 		.Font(FCoreStyle::GetDefaultFontStyle("Regular", 11))
 		.Text(FText::FromName(Asset.AssetName))
+	]
+	+ SHorizontalBox::Slot()
+	. FillWidth(1)
+	[
+		SNew(SSpacer).Size(FVector2D(1)) // 随便给长度啦，反正是FillWidth
+	]
+	+ SHorizontalBox::Slot()
+	. AutoWidth()
+	. VAlign(VAlign_Center)
+	[
+		// 这里我们第二次接触为UI添加事件，我们要绑定UI的状态到某些函数上，或者在UI更新的时候获得更多信息进行上下游更新
+		// 如何查询确定事件（委托）的函数签名，并且绑定函数呢？问小潘，打字太累了
+		SNew(SEnumComboBox, StaticEnum<EHowtoFixContent_TexCat>())
+		.OnEnumSelectionChanged(this, &FHowtoFixContentAssetInfo_Tex::OnCatChange)
+		.CurrentValue(this, &FHowtoFixContentAssetInfo_Tex::GetCat)
 	];
+}
+
+
+int32 FHowtoFixContentAssetInfo_Tex::
+GetCat() const
+{
+	return static_cast<int32>(Cat);
+}
+
+
+void FHowtoFixContentAssetInfo_Tex::
+OnCatChange(int32 Value, ESelectInfo::Type)
+{
+	Cat = static_cast<EHowtoFixContent_TexCat>(Value);
+}
+
+
+bool FHowtoFixContentAssetInfo_Tex::ExecMove()
+{
+	return FHowtoFixContentAssetInfo::ExecMove();
 }

@@ -20,13 +20,19 @@ struct FHowtoFixContentAssetInfo : public TSharedFromThis<FHowtoFixContentAssetI
 struct FHowtoFixContentAssetInfo_M : public FHowtoFixContentAssetInfo
 {
 	EHowtoFixContent_MatCat MatCat = EHowtoFixContent_MatCat::Default;
+	
 	virtual TSharedRef<SWidget> GetUI() override;
-	int32                       GetMatCat() const;
-	void                        OnMatCatChange(int32 Value, ESelectInfo::Type);
+	int32                       GetCat() const;
+	void                        OnCatChange(int32 Value, ESelectInfo::Type);
 	virtual bool                ExecMove() override;
 };
 
 struct FHowtoFixContentAssetInfo_Tex : public FHowtoFixContentAssetInfo
 {
+	EHowtoFixContent_TexCat Cat = EHowtoFixContent_TexCat::Default;
+	
 	virtual TSharedRef<SWidget> GetUI() override;
+	int32                       GetCat() const;
+	void                        OnCatChange(int32 Value, ESelectInfo::Type);
+	virtual bool                ExecMove() override;
 };

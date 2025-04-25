@@ -13,3 +13,11 @@ enum class EHowtoFixContent_MatCat
 	Weather UMETA(DisplayName="天气"),
 	Weapon  UMETA(DisplayName="武器"),
 };
+
+UENUM()
+enum class EHowtoFixContent_TexCat
+{
+	Default,
+	Weather,
+	Misc,
+};
