@@ -1,6 +1,7 @@
 #include "SHowtoFixContentAssetsView.h"
 
 #include "HowtoFixContentAssetInfo.h"
+#include "Misc/MessageDialog.h"
 #include "Widgets/Layout/SSpacer.h"
 
 
@@ -17,7 +18,35 @@ Construct(const FArguments& InArgs)
 	
 	ChildSlot
 	[
-		InfoListView.ToSharedRef()
+		SNew(SVerticalBox)
+		+ SVerticalBox::Slot()
+		. AutoHeight()
+		[
+			InfoListView.ToSharedRef()
+		]
+		+ SVerticalBox::Slot()
+		. FillHeight(1)
+		[
+			SNew(SSpacer)
+		]
+		+ SVerticalBox::Slot()
+		.AutoHeight()
+		[
+			SNew(SButton)
+			.Text(FText::FromString(TEXT("开始迁移喵")))
+			.OnClicked_Lambda([this]()
+			{
+				bool bAllDone = true;
+				for (auto Info : Infos)
+					bAllDone &= Info->ExecMove();
+
+				const FString Msg   = bAllDone ? TEXT("全部完成") : TEXT("部分失败");
+				const FText MsgText = FText::FromString(Msg);
+				FMessageDialog::Debugf(MsgText);
+
+				return FReply::Handled();
+			})
+		]
 	];
 }
 

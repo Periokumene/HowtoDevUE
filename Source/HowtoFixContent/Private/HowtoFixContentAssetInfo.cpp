@@ -16,6 +16,12 @@ GetUI()
 }
 
 
+bool FHowtoFixContentAssetInfo::
+ExecMove()
+{
+	return false;
+}
+
 
 TSharedRef<SWidget> FHowtoFixContentAssetInfo_M::
 GetUI()
@@ -69,6 +75,15 @@ OnMatCatChange(int32 Value, ESelectInfo::Type)
 {
 	MatCat = static_cast<EHowtoFixContent_MatCat>(Value);
 }
+
+
+bool FHowtoFixContentAssetInfo_M::
+ExecMove()
+{
+	// Do something
+	return false;
+}
+
 
 TSharedRef<SWidget> FHowtoFixContentAssetInfo_Tex::
 GetUI()

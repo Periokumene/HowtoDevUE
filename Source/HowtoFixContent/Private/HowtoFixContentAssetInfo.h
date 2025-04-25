@@ -11,8 +11,10 @@ struct FHowtoFixContentAssetInfo : public TSharedFromThis<FHowtoFixContentAssetI
 {
 	FHowtoFixContentAssetInfo() {}
 	virtual ~FHowtoFixContentAssetInfo() {}
-	virtual TSharedRef<SWidget> GetUI();
+
 	FAssetData Asset;
+	virtual TSharedRef<SWidget> GetUI();
+	virtual bool                ExecMove();
 };
 
 struct FHowtoFixContentAssetInfo_M : public FHowtoFixContentAssetInfo
@@ -21,6 +23,7 @@ struct FHowtoFixContentAssetInfo_M : public FHowtoFixContentAssetInfo
 	virtual TSharedRef<SWidget> GetUI() override;
 	int32                       GetMatCat() const;
 	void                        OnMatCatChange(int32 Value, ESelectInfo::Type);
+	virtual bool                ExecMove() override;
 };
 
 struct FHowtoFixContentAssetInfo_Tex : public FHowtoFixContentAssetInfo
