@@ -22,6 +22,8 @@ public class HowtoFixContent : ModuleRules
                 "SlateCore",
                 "InputCore",
                 "EditorWidgets",
+                "ContentBrowserData",
+                "UnrealEd",
             }
         );
     }

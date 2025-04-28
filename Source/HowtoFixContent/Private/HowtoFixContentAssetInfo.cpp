@@ -3,6 +3,8 @@
 
 #include "HowtoFixContentAssetInfo.h"
 
+#include "ContentBrowserDataSubsystem.h"
+#include "Editor.h"
 #include "HowtoFixContentMisc.h"
 #include "EditorWidgets/Public/SEnumCombobox.h"
 #include "Widgets/Layout/SSpacer.h"
@@ -19,8 +21,21 @@ GetUI()
 bool FHowtoFixContentAssetInfo::
 ExecMove()
 {
-	return false;
+	UContentBrowserDataSubsystem* Sys = GEditor->GetEditorSubsystem<UContentBrowserDataSubsystem>();
+	FContentBrowserItem Item          = Sys->GetItemAtPath(Asset.ObjectPath, EContentBrowserItemTypeFilter::IncludeFiles);
+	if (!ensure(Item.IsValid())) return false;
+
+	const FString Dest = GetDest_Folder();
+	return Item.Move(*Dest);
 }
+
+
+FString FHowtoFixContentAssetInfo::
+GetDest_Folder() const
+{
+	return TEXT("/Game/CodeV");
+}
+
 
 
 TSharedRef<SWidget> FHowtoFixContentAssetInfo_M::
@@ -76,12 +91,10 @@ OnCatChange(int32 Value, ESelectInfo::Type)
 	MatCat = static_cast<EHowtoFixContent_MatCat>(Value);
 }
 
-
-bool FHowtoFixContentAssetInfo_M::
-ExecMove()
+FString FHowtoFixContentAssetInfo_M::
+GetDest_Folder() const
 {
-	// Do something
-	return false;
+	return TEXT("/Game/CodeV/Mat");
 }
 
 
@@ -137,7 +150,9 @@ OnCatChange(int32 Value, ESelectInfo::Type)
 }
 
 
-bool FHowtoFixContentAssetInfo_Tex::ExecMove()
+FString FHowtoFixContentAssetInfo_Tex::
+GetDest_Folder() const
 {
-	return FHowtoFixContentAssetInfo::ExecMove();
+	return TEXT("/Game/CodeV/Tex");
 }
+

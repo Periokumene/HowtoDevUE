@@ -15,6 +15,7 @@ struct FHowtoFixContentAssetInfo : public TSharedFromThis<FHowtoFixContentAssetI
 	FAssetData Asset;
 	virtual TSharedRef<SWidget> GetUI();
 	virtual bool                ExecMove();
+	virtual FString             GetDest_Folder() const;
 };
 
 struct FHowtoFixContentAssetInfo_M : public FHowtoFixContentAssetInfo
@@ -24,7 +25,7 @@ struct FHowtoFixContentAssetInfo_M : public FHowtoFixContentAssetInfo
 	virtual TSharedRef<SWidget> GetUI() override;
 	int32                       GetCat() const;
 	void                        OnCatChange(int32 Value, ESelectInfo::Type);
-	virtual bool                ExecMove() override;
+	virtual FString             GetDest_Folder() const override;
 };
 
 struct FHowtoFixContentAssetInfo_Tex : public FHowtoFixContentAssetInfo
@@ -34,5 +35,5 @@ struct FHowtoFixContentAssetInfo_Tex : public FHowtoFixContentAssetInfo
 	virtual TSharedRef<SWidget> GetUI() override;
 	int32                       GetCat() const;
 	void                        OnCatChange(int32 Value, ESelectInfo::Type);
-	virtual bool                ExecMove() override;
+	virtual FString             GetDest_Folder() const override;
 };
